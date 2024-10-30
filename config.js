@@ -28,7 +28,7 @@ module.exports = {
   musicardTheme:"themes16", //Goes from themes1 to themes19
   activityName: "You", // This is bot status Write Anything here 
   activityType: "WATCHING",  // Available activity types : LISTENING , PLAYING
-  SupportServer: "https://discord.gg/xQF9f9yUEM",
+  SupportServer: "https://discord.gg/miqiling",
   CheckmarkIcon: "https://cdn.discordapp.com/emojis/819446784647757834.gif",
   MusicIcon:"https://cdn.discordapp.com/emojis/763415718271385610.gif",
   embedTimeout: 5,  // Timeout before the button interaction embeds are deleted ( Default - 5 seconds)
@@ -38,13 +38,10 @@ module.exports = {
 
   nodes: [
     {
-        name: "Server",
-        host: "nodev4.fypmoon.org",
-        port: 1118,
-        password: "fypmoon.org",
-        reconnectTimeout: 5000,
-        reconnectTries: Infinity,
-        secure: false
+   "host": "lava.catfein.com",
+   "port": 4000,
+   "password": "catfein",
+   "secure": false
     },
  ]
 }
