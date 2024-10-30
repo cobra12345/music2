@@ -1,23 +1,3 @@
-/*
-
-  ________.__                        _____.___.___________
- /  _____/|  | _____    ____  ____   \__  |   |\__    ___/
-/   \  ___|  | \__  \ _/ ___\/ __ \   /   |   |  |    |   
-\    \_\  \  |__/ __ \\  \__\  ___/   \____   |  |    |   
- \______  /____(____  /\___  >___  >  / ______|  |____|   
-        \/          \/     \/    \/   \/                  
-
-╔════════════════════════════════════════════════════════════════════════╗
-║                                                                        ║
-║  ## Created by GlaceYT!                                                ║
-║  ## Feel free to utilize any portion of the code                       ║
-║  ## DISCORD :  https://discord.com/invite/xQF9f9yUEM                   ║
-║  ## YouTube : https://www.youtube.com/@GlaceYt                         ║
-║                                                                        ║
-╚════════════════════════════════════════════════════════════════════════╝
-
-
-*/
 
 const { ApplicationCommandOptionType, EmbedBuilder } = require('discord.js');
 const config = require("../config.js");
@@ -104,9 +84,10 @@ async function play(client, interaction) {
             .setColor(config.embedColor)
             .setAuthor({
                 name: 'Request Update',
-                iconURL: config.CheckmarkIcon,
-                url: config.SupportServer
+                iconURL: config.CheckmarkIcon && isValidURL(config.CheckmarkIcon) ? config.CheckmarkIcon : null,
+                url: config.SupportServer && isValidURL(config.SupportServer) ? config.SupportServer : null
             })
+
             .setDescription('**➡️ Your request has been successfully processed.**\n**➡️ Please use buttons to control playback**')
             .setFooter({ text: '🎶 Enjoy your music!' });
 
@@ -127,6 +108,14 @@ async function play(client, interaction) {
     }
 }
 
+function isValidURL(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
 module.exports = {
     name: "play",
     description: "Play a song from a name or link",
@@ -141,24 +130,3 @@ module.exports = {
     queueNames: queueNames,
     requesters: requesters
 };
-
-/*
-
-  ________.__                        _____.___.___________
- /  _____/|  | _____    ____  ____   \__  |   |\__    ___/
-/   \  ___|  | \__  \ _/ ___\/ __ \   /   |   |  |    |   
-\    \_\  \  |__/ __ \\  \__\  ___/   \____   |  |    |   
- \______  /____(____  /\___  >___  >  / ______|  |____|   
-        \/          \/     \/    \/   \/                  
-
-╔════════════════════════════════════════════════════════════════════════╗
-║                                                                        ║
-║  ## Created by GlaceYT!                                                ║
-║  ## Feel free to utilize any portion of the code                       ║
-║  ## DISCORD :  https://discord.com/invite/xQF9f9yUEM                   ║
-║  ## YouTube : https://www.youtube.com/@GlaceYt                         ║
-║                                                                        ║
-╚════════════════════════════════════════════════════════════════════════╝
-
-
-*/
