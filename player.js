@@ -41,61 +41,57 @@ function initializePlayer(client) {
     });
 
     client.riffy.on("trackStart", async (player, track) => {
-        const channel = client.channels.cache.get(player.textChannel);
-        const trackUri = track.info.uri;
-        const requester = requesters.get(trackUri);
+    const channel = client.channels.cache.get(player.textChannel);
+    if (!channel) return;
 
-        try {
-            const musicard = await Dynamic({
-                thumbnailImage: track.info.thumbnail || 'https://example.com/default_thumbnail.png',
-                backgroundColor: '#070707',
-                progress: 10,
-                progressColor: '#FF7A00',
-                progressBarColor: '#5F2D00',
-                name: track.info.title,
-                nameColor: '#FF7A00',
-                author: track.info.author || 'Unknown Artist',
-                authorColor: '#696969',
-            });
+    const trackUri = track.info.uri;
+    const requester = requesters.get(trackUri);
 
-            // Save the generated card to a file
-            const cardPath = path.join(__dirname, 'musicard.png');
-            fs.writeFileSync(cardPath, musicard);
+    try {
+        const musicard = await Dynamic({
+            thumbnailImage: track.info.thumbnail || 'https://example.com/default_thumbnail.png', // Fallback
+            backgroundColor: '#070707',
+            progress: 10,
+            progressColor: '#FF7A00',
+            progressBarColor: '#5F2D00',
+            name: track.info.title || "Unknown Title", // Handle missing title
+            nameColor: '#FF7A00',
+            author: track.info.author || 'Unknown Artist',
+            authorColor: '#696969',
+        });
 
-            // Prepare the attachment and embed
-            const attachment = new AttachmentBuilder(cardPath, { name: 'musicard.png' });
-            const embed = new EmbedBuilder()
-                .setAuthor({
-                    name: 'Now Playing',
-                    iconURL: 'https://cdn.discordapp.com/emojis/838704777436200981.gif' // Replace with actual icon URL
-                })
-                .setDescription('🎶 **Controls:**\n 🔁 `Loop`, ❌ `Disable`, ⏭️ `Skip`, 📜 `Queue`, 🗑️ `Clear`\n ⏹️ `Stop`, ⏸️ `Pause`, ▶️ `Resume`, 🔊 `Vol +`, 🔉 `Vol -`')
-                .setImage('attachment://musicard.png')
-                .setColor('#FF7A00');
+        const cardPath = path.join(__dirname, 'musicard.png');
+        fs.writeFileSync(cardPath, musicard);
 
-            // Action rows for music controls
-            const actionRow1 = createActionRow1(false);
-            const actionRow2 = createActionRow2(false);
+        const attachment = new AttachmentBuilder(cardPath, { name: 'musicard.png' });
+        const embed = new EmbedBuilder()
+            .setAuthor({ name: 'Now Playing', iconURL: 'https://example.com/icon.gif' })
+            .setDescription('🎶 **Controls:**\n 🔁 `Loop`, ❌ `Disable`, ⏭️ `Skip`, 📜 `Queue`, 🗑️ `Clear`\n ⏹️ `Stop`, ⏸️ `Pause`, ▶️ `Resume`, 🔊 `Vol +`, 🔉 `Vol -`')
+            .setImage('attachment://musicard.png')
+            .setColor('#FF7A00');
 
-            // Send the message and set up the collector
-            const message = await channel.send({
-                embeds: [embed],
-                files: [attachment],
-                components: [actionRow1, actionRow2]
-            });
-            currentTrackMessageId = message.id;
+        const actionRow1 = createActionRow1(false);
+        const actionRow2 = createActionRow2(false);
 
-            if (collector) collector.stop(); // Stop any existing collectors
-            collector = setupCollector(client, player, channel, message);
+        const message = await channel.send({
+            embeds: [embed],
+            files: [attachment],
+            components: [actionRow1, actionRow2],
+        });
+        currentTrackMessageId = message.id;
 
-        } catch (error) {
-            console.error("Error creating or sending music card:", error.message);
-            const errorEmbed = new EmbedBuilder()
-                .setColor('#FF0000')
-                .setDescription("⚠️ **Unable to load track card. Continuing playback...**");
-            await channel.send({ embeds: [errorEmbed] });
-        }
+        if (collector) collector.stop();
+        collector = setupCollector(client, player, channel, message);
+
+    } catch (error) {
+        console.error("Error creating or sending music card:", error.message);
+        const errorEmbed = new EmbedBuilder()
+            .setColor('#FF0000')
+            .setDescription("⚠️ **Unable to load track card. Continuing playback...**");
+        await channel.send({ embeds: [errorEmbed] });
+    }
     });
+
 
     client.riffy.on("trackEnd", async (player) => {
         await disableTrackMessage(client, player);
