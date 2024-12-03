@@ -38,10 +38,10 @@ module.exports = {
 
   nodes: [
     {
-   "host": "lava.catfein.com",
-   "port": 4000,
-   "password": "catfein",
-   "secure": false
+    "Host": "lava-v4.ajieblogs.eu.org",
+    "Port": "80",
+    "Password": "https://dsc.gg/ajidevserver",
+    "Secure": "false"
     },
  ]
 }
