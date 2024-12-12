@@ -38,10 +38,10 @@ module.exports = {
 
   nodes: [
     {
-     "host": "lavalink.clxud.dev",
-     "port": 2333,
-     "password": "youshallnotpass",
-     "secure": false
+   "host": "lava.catfein.com",
+   "port": 4000,
+   "password": "catfein",
+   "secure": false
     },
  ]
 }
