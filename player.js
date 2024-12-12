@@ -49,7 +49,6 @@ function initializePlayer(client) {
 
     try {
         const musicard = await Dynamic({
-            thumbnailImage: track.info.thumbnail || 'https://example.com/default_thumbnail.png', // Fallback
             backgroundColor: '#070707',
             progress: 10,
             progressColor: '#FF7A00',
